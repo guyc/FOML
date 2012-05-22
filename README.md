@@ -38,7 +38,7 @@ Usage
 
 ```
 <?php
-require_once 'foml/Foml.php';
+require_once 'FOML/FomlConfig.php';
 Foml::RenderInline('report-template.foml', array('var'=$value, ...));
 ?>
 ```

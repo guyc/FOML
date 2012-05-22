@@ -1,13 +1,17 @@
 <?php
 
-require_once 'FomlConfig.php';
+/*
+ * If you are NOT using a class autoloader 
+ * you should require_once 'FomlConfig.php'
+ * to pre-load all of the Foml classes.
+ */
 
-class FOML
+class Foml
 {
     static $fopExec = "fop-1.0/fop";           // fopExec is relative to this directory
-    static $pdfMimeType = "application/pdf";
     static $tempDir = null;                    // defaults to system temp directory
-    static $keepTempFiles = true;             // set to true for debugging
+    static $keepTempFiles = false;             // set to true for debugging
+    static $pdfMimeType = "application/pdf";
 
     static function GeneratePhp($Template)
     {
@@ -27,7 +31,7 @@ class FOML
                 $$key = $value;
             }
         }
-        $_php = FOML::GeneratePhp($Template);
+        $_php = Foml::GeneratePhp($Template);
 
         ob_start();
         eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
@@ -38,7 +42,7 @@ class FOML
 
     static function TempName($Prefix)
     {
-        $tempDir = FOML::$tempDir;
+        $tempDir = Foml::$tempDir;
         if ($tempDir == null) $tempDir = sys_get_temp_dir();
         return tempnam($tempDir, $Prefix);
     }
@@ -47,8 +51,8 @@ class FOML
     // The file must be unlinked by the caller.
     static function XslFoToPdf($XslFo)
     {
-        $pdfFileName = FOML::TempName("pdf-");
-        $xslFoFileName = FOML::TempName("xslfo-");
+        $pdfFileName = Foml::TempName("pdf-");
+        $xslFoFileName = Foml::TempName("xslfo-");
 
         $xslFile = fopen($xslFoFileName, "w");
         fwrite($xslFile, $XslFo);
@@ -56,21 +60,21 @@ class FOML
 
         $escapedPdfFileName = escapeshellarg($pdfFileName);
         $escapedXslFoFileName = escapeshellarg($xslFoFileName);
-        $fop = dirname(__FILE__).'/'.FOML::$fopExec;
+        $fop = dirname(__FILE__).'/'.Foml::$fopExec;
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName}";
         shell_exec($cmd);
 
-        if (!FOML::$keepTempFiles) unlink($xslFoFileName);
+        if (!Foml::$keepTempFiles) unlink($xslFoFileName);
 
         return $pdfFileName;
     }
 
     static function Render($Template, $Args=null, $Headers=null)
     {
-        $xslFo = FOML::GenerateXslFo($Template, $Args);
-        $pdfFileName = FOML::XslFoToPdf($xslFo);
+        $xslFo = Foml::GenerateXslFo($Template, $Args);
+        $pdfFileName = Foml::XslFoToPdf($xslFo);
         $size = filesize($pdfFileName);
-        $mimeType = FOML::$pdfMimeType;
+        $pdfMimeType = Foml::$pdfMimeType;
 
         if ($Headers) {
             foreach ($Headers as $header) {
@@ -84,18 +88,18 @@ class FOML
         fpassthru($fileHandle);
         fclose($fileHandle);
 
-        if (!FOML::$keepTempFiles) unlink($pdfFileName);
+        if (!Foml::$keepTempFiles) unlink($pdfFileName);
     }
     static function RenderInline($Template, $Args=null)
     {
         $headers = array("Content-Disposition"=>"inline");
-        FOML::Render($Template, $Args, $headers);
+        Foml::Render($Template, $Args, $headers);
     }
 
     static function RenderAttachment($Template, $Filename, $Args=null)
     {
         $headers = array("Content-Disposition: attachment; filename=\"{$FileName}\"");
-        FOML::Render($Template, $Args, $headers);
+        Foml::Render($Template, $Args, $headers);
     }
 }
 
