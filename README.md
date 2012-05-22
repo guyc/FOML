@@ -1,25 +1,37 @@
 FOML PHP Implementation
 =======================
 
+What is FOML?
+-------------
+
+Format Objects Markup Language is a concise language for PDF document layout.  FOML
+provides a clean mechanism for generating [XLS-FO](http://www.w3.org/TR/xsl/).  
+[Apache FOP](http://xmlgraphics.apache.org/fop/index.html) is then used to render
+the XLS-FO file to a PDF document.
+
+FOML is a unabashed rip-off of HAML.  [More details here.](http://guy.clearwater.com.au/blog/2012/05/19/a-practical-pdf-generator/)
+
 Installation
 ------------
 
-1. Copy the files from the repository into your PHP code library.
+1. Clone the FOML repository into your PHP code library.
 
-2. Download the binaries for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html) 
+2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html)
 
-3. Install the binaries into a directory under the Foml library.
+ 
+3. Untar the binaries into a subdirectory inside the FOML directory.
 
-4. Install Java if necessary, and ensure that the fop binary will launch okay.
+4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.
 
 You should end up with a directory structure something like this:
 
 ```
   +-application/
-    +--foml/
+    +--FOML/
        +--examples/
           +--foml/
        +--fop-1.0/
+          +--fop    (this it the fop executable)
 ```
 
 Usage
@@ -32,6 +44,4 @@ Foml::RenderInline('report-template.foml', array('var'=$value, ...));
 ?>
 ```
 
-FOML Syntax
------------
 
