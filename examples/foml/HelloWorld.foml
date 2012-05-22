@@ -1,0 +1,10 @@
+!!!
+%root(xmlns:fo="http://www.w3.org/1999/XSL/Format")
+  %layout-master-set
+    %simple-page-master(master-name="my-page")
+      %region-body(margin="1in")
+
+  %page-sequence(master-reference="my-page")
+    %flow(flow-name="xsl-region-body")
+      %block 
+        Hello, world!

@@ -1,0 +1,46 @@
+!!!
+%root(xmlns:fo="http://www.w3.org/1999/XSL/Format")
+  %layout-master-set
+    %simple-page-master(master-name="my-page" page-width="210mm" page-height="297mm")
+      %region-body(margin="25mm")
+
+  %page-sequence( master-reference="my-page")
+    %flow(flow-name="xsl-region-body")
+      %block
+
+        / table start
+        %table(table-layout="fixed" width="100%" border-collapse="separate")
+          %table-column(column-width="30mm")
+          %table-column(column-width="30mm")
+          %table-column(column-width="30mm")
+          %table-column(column-width="30mm")
+
+          %table-header
+            %table-cell
+              %block
+                Character
+            %table-cell
+              %block
+                Decimal
+            %table-cell
+              %block
+                Hexadecimal
+            %table-cell
+              %block
+                Binary
+
+          %table-body
+            - foreach ($rows as $row)
+              %table-row
+                %table-cell
+                  %block 
+                    = $row->char
+                %table-cell
+                  %block
+                    = $row->dec
+                %table-cell
+                  %block
+                    = $row->hex
+                %table-cell
+                  %block
+                    = $row->bin
