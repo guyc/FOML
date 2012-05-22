@@ -1,6 +1,6 @@
 <?php
-require_once "../Foml.php";
+require_once "../FomlConfig.php";
 
-FOML::RenderInline("foml/HelloWorld.foml");
+Foml::RenderInline("foml/HelloWorld.foml");
 
 ?>
