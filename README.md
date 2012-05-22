@@ -4,12 +4,11 @@ FOML PHP Implementation
 What is FOML?
 -------------
 
-Format Objects Markup Language is a concise language for PDF document layout.  FOML
-provides a clean mechanism for generating [XLS-FO](http://www.w3.org/TR/xsl/).  
-[Apache FOP](http://xmlgraphics.apache.org/fop/index.html) is then used to render
-the XLS-FO file to a PDF document.
+Format Objects Markup Language is a concise language for PDF document layout.  FOML provides a clean mechanism for generating [XLS-FO](http://www.w3.org/TR/xsl/).  [Apache FOP](http://xmlgraphics.apache.org/fop/index.html) is then used to render the XLS-FO file to a PDF document.
 
-FOML is a unabashed rip-off of HAML.  [More details here.](http://guy.clearwater.com.au/blog/2012/05/19/a-practical-pdf-generator/)
+FOML gives you a concise and powerful way to generate PDF reports, and isolates the layout from your application logic.
+
+The good parts of FOML were stolen from HAML.  See the original [blog post about FOML](http://guy.clearwater.com.au/blog/2012/05/19/a-practical-pdf-generator/) for more background.
 
 Installation
 ------------
