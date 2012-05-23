@@ -47,6 +47,8 @@ Foml::RenderInline('report-template.foml', array('var'=$value, ...));
 FOML Syntax
 ===========
 
+The following syntax is currently supported.  Note that HAML-style string expansion #{$likethis} is not yet supported.
+
 XML Elements
 ------------
 
@@ -121,14 +123,14 @@ renders as
 ### PHP Execution: -
 A hyphen flowed by PHP code causes the PHP code to be executed.  Any output
 to stdio will be rendered into the output stream.  If the code contains one
-of if, else, while, for, foreach or elseif the opening '{' do NOT need to supplied.
+of if, else, while, for, foreach or elseif, the {} brackets are NOT required.
 
 ```
 - $list = array('Walt','Kowalski')
 - foreach ($list as $element)
-  %table-cell
-    %block 
-      = $element
+    %table-cell
+      %block 
+        = $element
 ```
 renders as
 ```
@@ -172,9 +174,8 @@ A line beginning with '#-' is entirely ignored and does not generate any output 
 Filters
 -------
 
-### :include Filter
-Currently the only available filter is ':include'.  It takes as the only argument
-the name of the file to be included.
+### Filter :include(filename)
+The :include filter takes one argument; the name of the file to be included.
 ```
  :include('Filename.foml')
 ```
