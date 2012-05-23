@@ -1,11 +1,37 @@
 <?php
 class FomlFilter
 {
-    static function CreateAndRender($Args)
+    public $children = array();
+
+    function RenderPrefix()
     {
-        $filterClass = get_called_class();
-        $filter = new $filterClass($Args);
-        $filter->Render();
+    }
+
+    function RenderSuffix()
+    {
+    }
+
+    function Render($Indent=0)
+    {
+        $this->RenderPrefix();
+        foreach ($this->children as $child) {
+            $child->Render();
+        }
+        $this->RenderSuffix();
+    }
+
+    /*
+     *  $Children is an array of FomlParseTree.
+     *  The default behaviour here is just to Generate FomlNodes
+     *  for each child, but some filters might like to 
+     *  override this method to handle their children as plain text.
+     */
+    function AddChildren($Children)
+    {
+        // Generate and add children to the node.
+        foreach ($Children as $child) {
+            $this->children[] = $child->Generate();
+        }
     }
 }
 

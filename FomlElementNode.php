@@ -19,7 +19,6 @@ class FomlElementNode extends FomlNode
         $args      = $Matches[4];
         $close     = $Matches[5];  // '/' if tag should self-close, '' otherwise
 
-        if ($namespace=="") $namespace = FomlParser::$DEFAULT_NAMESPACE;
         $this->namespace = $namespace;
         $this->selfClose = $close=='/';
         $this->tag = $tag;
@@ -29,8 +28,14 @@ class FomlElementNode extends FomlNode
 
     function ParseArgs($Args)
     {
-        // hack for now until I write a real arg parser which support #{$this->count+1}
-        if (preg_match("/^\((.*)\)(.*)/", $Args, $matches)) {
+        // REVISIT - this is a piss-poor
+        // hack for now until I write a real arg parser.
+        // By making the paren matches non-hungry it will now support lines like this:
+        // %fo:block(border-after-style="solid") = join(" ",array("Thao","Vang","Lor"))
+        // but will not correctly match all possible uses of brackets and does not support
+        // expansion of inline evaluation contexts #{$variable}
+        if (preg_match("/^\((.*?)\)(.*)/", $Args, $matches)) {
+            //print "<pre>"; print_r($matches); print "</pre>";
             $this->args = $matches[1];
             $Args = $matches[2];
         }
@@ -56,6 +61,12 @@ class FomlElementNode extends FomlNode
                 }
             }
         }
+    }
+
+    function Render()
+    {
+        if ($this->namespace=="") $this->namespace = Foml::$defaultNamespace;
+        parent::Render();
     }
 
     function RenderPrefix()

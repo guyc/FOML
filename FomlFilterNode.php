@@ -16,16 +16,21 @@ class FomlFilterNode extends FomlNode
         $args   = $Matches[3];
         if (isset(FomlParser::$FILTER_CLASSES[$filter]))
         {
-            $this->filterClass = FomlParser::$FILTER_CLASSES[$filter];
-            $this->args = $args;
+            $filterClass = FomlParser::$FILTER_CLASSES[$filter];
+            $this->filter  = new $filterClass($args);
         } else {
             throw new FomlException("Unknown filter '{$filter}'");
         }
     }
 
-    function RenderPrefix()
+    function AddChildren($Children)
     {
-        print "<?php {$this->filterClass}::CreateAndRender({$this->args}) ?>\n";
+        $this->filter->AddChildren($Children);
+    }
+
+    function Render()
+    {
+        $this->filter->Render();
     }
 
 }

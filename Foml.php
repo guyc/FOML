@@ -12,6 +12,7 @@ class Foml
     static $tempDir = null;                    // defaults to system temp directory
     static $keepTempFiles = false;             // set to true for debugging
     static $pdfMimeType = "application/pdf";
+    static $defaultNamespace = "fo";
 
     static function GeneratePhp($Template)
     {

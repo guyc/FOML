@@ -22,10 +22,11 @@ require_once 'FomlExecNode.php';
 // FOML filter definitions
 require_once 'FomlFilter.php';
 require_once 'FomlIncludeFilter.php';
+require_once 'FomlNamespaceFilter.php';
 
 // FOML document definitions
 require_once 'FomlDoc.php';
 require_once 'FomlParseTree.php';
 require_once 'FomlParser.php';
-
+require_once 'FomlException.php';
 ?>
