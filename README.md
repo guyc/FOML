@@ -47,12 +47,14 @@ Foml::RenderInline('templates/report-template.foml', array('var'=$value, ...));
 
 ```
 
-```Foml::RenderInline($Template, $ArgsAssocArray)```
+### ```Foml::RenderInline($Template, $ArgsAssocArray)```
+
 Expands the FOML document file named by $Template, making the values passed in $ArgsAssocArray available
 as local variables during the expansion.  Finally the resulting PDF document is streamed inline.  Generally
 this will cause the PDF to open in the viewers browser window.
 
-```Foml::RenderAttachment($Template,$Filename,$ArgsAssocArray)```
+### ```Foml::RenderAttachment($Template,$Filename,$ArgsAssocArray)```
+
 Expands the FOML document file named by $Template, making the values passed in $ArgsAssocArray available
 as local variables during the expansion.  Finally the resulting PDF document is streamed as an attachment
 with the $Filename supplied as the default filename.  Generally this will cause browser to prompt the user
