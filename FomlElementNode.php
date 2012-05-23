@@ -10,6 +10,8 @@ class FomlElementNode extends FomlNode
     public $selfClose;
     public $args;
 
+    // REVISIT - should not allow children if it is autoclosed
+
     function __construct($Matches)
     {
         $namespace = $Matches[2];

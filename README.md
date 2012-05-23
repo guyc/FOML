@@ -72,7 +72,9 @@ XML Elements
 The percent character at the begining of a line, followed immediately
 by an element name will be rendrered as and XML element.  The default namespace
 "fo" will be used if a namespace is not specified.  To use the "xsl"
-namespace it should be explicitly specified.
+namespace, it should be explicitly specified (eg %xsl:stylesheet).  
+A trailing '/' at the end of the line, following any arguments, will cause
+the node to be auto-closed.
 
 Attributes may optionally be specified following the element name.  For example
 
@@ -94,13 +96,17 @@ renders as
 
 ### XML Comments
 A line beginning with a single forward-slash renders as an XML comment in the output stream.
+Any following lines at deeper indent will be included in the comment.
 
 ```
- / Oh, I am at peace.
+ / Go in peace.
+   Oh, I am at peace.
 ```
+
 renders as
+
 ```
-<!-- Oh, I am at peace. -->
+<!-- Go in peace. Oh, I am at peace. -->
 ```
 
 ### XML Prolog: !!!
