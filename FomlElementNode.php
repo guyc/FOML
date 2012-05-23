@@ -1,9 +1,10 @@
 <?php
-class FomlTagNode extends FomlNode
+class FomlElementNode extends FomlNode
 {
-    const MATCH_RE = "/^%(([-a-zA-Z0-9]+):)?([-a-zA-Z0-9]+)(\/?)\s*(.*)/";
+    // matches namespace:element[/]args
+    const MATCH_RE = "/^%(([-a-zA-Z0-9]+):)?([-a-zA-Z0-9]+)\s*(.*?)(\/?)\s*$/";
     
-    // %tag(opts) 
+    // %element(opts) 
     public $namespace;
     public $tag;
     public $selfClose;
@@ -13,8 +14,8 @@ class FomlTagNode extends FomlNode
     {
         $namespace = $Matches[2];
         $tag       = $Matches[3];
-        $close     = $Matches[4];  // '/' if tag should self-close, '' otherwise
-        $args      = $Matches[5];
+        $args      = $Matches[4];
+        $close     = $Matches[5];  // '/' if tag should self-close, '' otherwise
 
         if ($namespace=="") $namespace = FomlParser::$DEFAULT_NAMESPACE;
         $this->namespace = $namespace;

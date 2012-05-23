@@ -4,8 +4,8 @@ class FomlParser
     static $DEFAULT_NAMESPACE = "fo";
     static $NODE_CLASSES = array(
                                  'FomlExecNode',
-                                 'FomlInsertNode',
-                                 'FomlTagNode',
+                                 'FomlEvalNode',
+                                 'FomlElementNode',
                                  'FomlCommentNode',
                                  'FomlDoctypeNode',
                                  'FomlFilterNode',
