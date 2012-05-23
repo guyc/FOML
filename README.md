@@ -1,12 +1,12 @@
-FOML PHP Implementation
-=======================
+FOML for PHP
+============
 
 What is FOML?
 -------------
 
 Format Objects Markup Language (FOML) is a concise language for PDF document layout.  This library provides a framework for converting
 FOML into [XLS-FO](http://www.w3.org/TR/xsl/), and bindings to [Apache FOP](http://xmlgraphics.apache.org/fop/index.html) to render
-the XLS-FO file to a PDF document.
+the output as a PDF document.
 
 FOML gives you a concise and powerful way to generate PDF reports, and isolates the layout from your application logic.
 It keeps the PDF layout logic the hell off your application's lawn.
@@ -42,10 +42,21 @@ Usage
 ```
 <?php
 require_once 'FOML/FomlConfig.php';
-Foml::RenderInline('report-template.foml', array('var'=$value, ...));
+Foml::RenderInline('templates/report-template.foml', array('var'=$value, ...));
 ?>
 
 ```
+
+```Foml::RenderInline($Template, $ArgsAssocArray)```
+Expands the FOML document file named by $Template, making the values passed in $ArgsAssocArray available
+as local variables during the expansion.  Finally the resulting PDF document is streamed inline.  Generally
+this will cause the PDF to open in the viewers browser window.
+
+```Foml::RenderAttachment($Template,$Filename,$ArgsAssocArray)```
+Expands the FOML document file named by $Template, making the values passed in $ArgsAssocArray available
+as local variables during the expansion.  Finally the resulting PDF document is streamed as an attachment
+with the $Filename supplied as the default filename.  Generally this will cause browser to prompt the user
+to save the PDF file.
 
 FOML Syntax
 ===========
