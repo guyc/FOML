@@ -188,9 +188,9 @@ renders as
 ```
 
 ### Code Comments
-A line beginning with '#-' is entirely ignored and does not generate any output in the XLS-FO stream.
+A line beginning with '-#' is entirely ignored and does not generate any output in the XLS-FO stream.
 ```
- #- Comment text
+ -# Comment text
 ```
 
 Filters
