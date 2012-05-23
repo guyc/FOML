@@ -32,7 +32,7 @@
         -#----------------------------------------
         -# %element with explict namespace, arguments and auto-close
         -#----------------------------------------
-        %fo:block(border-after-style="dashed")/
+        %fo:block(border-after-style="dashed") /
 
         -#----------------------------------------
         -# line continuations
@@ -79,3 +79,7 @@
                     -# in an execution context, stdout is captured, the value is not 
                     -#----------------------------------------
                     - printf("%08b", $i)
+
+        %fo:block(border-after-style="dashed") text in extension
+        %fo:block(border-after-style="dashed") - print "execution context in extension"
+        %fo:block(border-after-style="dashed") = "evaluation context in extension"

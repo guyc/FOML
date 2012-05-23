@@ -2,7 +2,7 @@
 require_once "../FomlConfig.php";
 
 // This test exercises all node types and variations.
-Foml::$keepTempFiles = true;
+Foml::$keepTempFiles = false;
 $debug = false;
 
 if (!$debug) {

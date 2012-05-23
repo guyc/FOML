@@ -23,7 +23,8 @@ class FomlElementNode extends FomlNode
         $this->namespace = $namespace;
         $this->selfClose = $close=='/';
         $this->tag = $tag;
-        $this->ParseArgs($args);
+        $extra = $this->ParseArgs($args);
+        $this->ParseExtra($extra);
     }
 
     function ParseArgs($Args)
@@ -33,7 +34,28 @@ class FomlElementNode extends FomlNode
             $this->args = $matches[1];
             $Args = $matches[2];
         }
-        return $Args;  // return unconsumed code, not currently used.
+        return $Args;
+    }
+
+    // The $Extra string may include a shorthand for certain other node types.
+    // -.*  : execution context
+    // =.*  : evaluation context
+    // .*   : text node
+    function ParseExtra($Extra)
+    {
+        $extNodes = array('FomlExecNode', 'FomlEvalNode', 'FomlTextNode');
+
+        // FomlTextNode matches everything
+
+        $Extra = trim($Extra);
+        if ($Extra != "") {
+            foreach ($extNodes as $nodeClass) {
+                if (preg_match($nodeClass::MATCH_RE, $Extra, $matches)) {
+                    $this->children[] = new $nodeClass($matches);
+                    break;
+                }
+            }
+        }
     }
 
     function RenderPrefix()
