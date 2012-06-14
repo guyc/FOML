@@ -1,6 +1,7 @@
 <?php
 class FomlInsertNode extends FomlNode
 {
+    public $mode = Foml::PHP_MODE;
     const MATCH_RE = "/^=\s*(.*)/";
 
     function __construct($Matches)
@@ -10,9 +11,8 @@ class FomlInsertNode extends FomlNode
 
     function RenderPrefix()
     {
-        print "<?php print ";
+        print "print ";
         print $this->code;
-        print "; ?>";
-        print " \n";
+        print ";\n";
     }
 }

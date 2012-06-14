@@ -8,9 +8,12 @@
 
 class Foml
 {
+    const PHP_MODE = 'php';
+    const XML_MODE = 'xml';
+
     static $fopExec = "fop-1.0/fop";           // fopExec is relative to this directory
     static $tempDir = null;                    // defaults to system temp directory
-    static $keepTempFiles = false;             // set to true for debugging
+    static $keepTempFiles = true;              // set to true for debugging
     static $pdfMimeType = "application/pdf";
 
     static function GeneratePhp($Template)
@@ -33,10 +36,12 @@ class Foml
         }
         $_php = Foml::GeneratePhp($Template);
 
+        //Dump($_php); exit;
         ob_start();
         eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
         $xslFo = ob_get_contents();
         ob_end_clean();
+        //Dump($xslFo); exit;
         return $xslFo;
     }
 
@@ -98,7 +103,7 @@ class Foml
 
     static function RenderAttachment($Template, $Filename, $Args=null)
     {
-        $headers = array("Content-Disposition: attachment; filename=\"{$FileName}\"");
+        $headers = array("Content-Disposition: attachment; filename=\"{$Filename}\"");
         Foml::Render($Template, $Args, $headers);
     }
 }

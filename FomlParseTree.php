@@ -60,7 +60,7 @@ class FomlParseTree
             }
 
             # only pure whitespace lines will be skipped here
-            if (preg_match("/^(\s*)(.+)/", $line, $matches)) {
+            if (preg_match("/^(\s*)([^\s].+)/", $line, $matches)) {
                 $tree = new FomlParseTree();
                 $tree->indent = strlen($matches[1]);
                 $tree->text = $matches[2];
@@ -93,7 +93,8 @@ class FomlParseTree
 
         // Generate and add children to the node.
         foreach ($this->children as $child) {
-            $node->children[] = $child->Generate();
+            $childNode = $child->Generate();
+            $node->children[] = $childNode;
         }
 
         return $node;

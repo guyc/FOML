@@ -4,6 +4,7 @@ class FomlDoc extends FomlNode
 
     function RenderToString()
     {
+        $this->state = new FomlRenderState();
         ob_start();
         $this->Render();
         $output = ob_get_contents();

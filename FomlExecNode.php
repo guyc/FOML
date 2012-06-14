@@ -1,6 +1,7 @@
 <?php
 class FomlExecNode extends FomlNode
 {
+    public $mode = Foml::PHP_MODE;
     const MATCH_RE = "/^-\s*(.*)/";
     /*
      * Examples
@@ -31,19 +32,18 @@ class FomlExecNode extends FomlNode
 
     function RenderPrefix()
     {
-        print "<?php ";
         print $this->code;
         if ($this->hasBlock) {
-            print "{ ?>";
+            print "{";
         } else {
-            print "; ?>";
+            print ";";
         }
     }
 
     function RenderSuffix()
     {
         if ($this->hasBlock) {
-            print "<?php } ?>";
+            print "}";
         }
     }
 }
