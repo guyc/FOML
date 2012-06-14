@@ -1,0 +1,6 @@
+-#----------------------------------------
+-# simple layout included by Sampler.foml
+-#----------------------------------------
+%layout-master-set
+  %simple-page-master(master-name="my-page" page-width="210mm" page-height="297mm")
+    %region-body(margin="25mm")

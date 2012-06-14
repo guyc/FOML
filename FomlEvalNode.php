@@ -1,5 +1,5 @@
 <?php
-class FomlInsertNode extends FomlNode
+class FomlEvalNode extends FomlNode
 {
     public $mode = Foml::PHP_MODE;
     const MATCH_RE = "/^=\s*(.*)/";

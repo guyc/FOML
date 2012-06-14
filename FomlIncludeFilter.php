@@ -1,19 +1,22 @@
 <?php
 class FomlIncludeFilter extends FomlFilter
 {
-    public $fileName;
+    public $args;
 
-    function __construct($Arg)
+    function __construct($Args)
     {
-        $this->fileName = $Arg;
+        // REVISIT - this expression should be evaluated 
+        // in the eval context where all variables are available.
+        $this->args = $Args;
     }
 
-    function Render()
+    function RenderPrefix()
     {
         // REVISIT : can't just print the PHP here because we are
         // called from within the eval context.  However doing it this
         // way hides all of the variables, which might be a problem.
-        eval('?'.'>'. FomlParser::ParseFile($this->fileName));
+        $fileName = eval("return {$this->args};");
+        eval('?'.'>'. FomlParser::ParseFile($fileName));
     }
 }
 

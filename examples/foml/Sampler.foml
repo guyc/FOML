@@ -1,0 +1,89 @@
+!!!
+
+/ This sampler exercises all supported
+  FOML syntax
+
+%root(xmlns:fo="http://www.w3.org/1999/XSL/Format")
+ 
+  -#----------------------------------------
+  -# :include Filter
+  -#----------------------------------------
+  :include('foml/SamplerLayout.foml')
+
+  -#----------------------------------------
+  -# %element with parameters
+  -#----------------------------------------
+  %page-sequence( master-reference="my-page")
+    %flow(flow-name="xsl-region-body")
+
+      -#----------------------------------------
+      -# %element without parameters
+      -#----------------------------------------
+      %block
+
+        -#----------------------------------------
+        -# plain text
+        -#----------------------------------------
+        / This should not appear in the output
+          and neither should this.
+
+        FOML Sampler
+
+        -#----------------------------------------
+        -# %element with explict namespace, arguments and auto-close
+        -#----------------------------------------
+        %fo:block(border-after-style="dashed") /
+
+        -#----------------------------------------
+        -# line continuations
+        -#----------------------------------------
+
+        %table(                            |
+          table-layout="fixed"             |
+          width="100%"                     |
+          border-collapse="separate"       |
+        )                                  |
+
+          %table-column(column-width="30mm")
+          %table-column(column-width="30mm")
+          %table-column(column-width="30mm")
+
+          %table-header
+            %table-cell
+              %block
+                Decimal
+            %table-cell
+              %block
+                Hexadecimal
+            %table-cell
+              %block
+                Binary
+
+          %table-body
+            - for ($i=0;$i<64;$i++)
+              %table-row
+                %table-cell
+                  %block 
+                    = $i
+                %table-cell
+                  %block
+                    -#----------------------------------------
+                    -# = evaluation context
+                    -# in an evaluation context, the value of the expression is captured
+                    -#----------------------------------------
+                    = dechex($i)
+                %table-cell
+                  %block
+                    -#----------------------------------------
+                    -# execution context
+                    -# in an execution context, stdout is captured, the value is not 
+                    -#----------------------------------------
+                    - printf("%08b", $i)
+
+        %fo:block(border-after-style="dashed") text in extension
+        %fo:block(border-after-style="dashed") - print "execution context in extension"
+        %fo:block(border-after-style="dashed") = "evaluation context in extension"
+        %fo:block(border-after-style="solid") = join(" ",array("Thao","Vang","Lor"))  
+
+:namespace(xsl)
+  %stylesheet

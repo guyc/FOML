@@ -12,20 +12,21 @@ require_once 'Foml.php';
 require_once 'FomlNode.php';
 require_once 'FomlCommentNode.php';
 require_once 'FomlDoctypeNode.php';
+require_once 'FomlEvalNode.php';
 require_once 'FomlExecNode.php';
 require_once 'FomlFilterNode.php';
-require_once 'FomlInsertNode.php';
-require_once 'FomlTagNode.php';
+require_once 'FomlElementNode.php';
 require_once 'FomlTextNode.php';
 require_once 'FomlExecNode.php';
 
 // FOML filter definitions
 require_once 'FomlFilter.php';
 require_once 'FomlIncludeFilter.php';
+require_once 'FomlNamespaceFilter.php';
 
 // FOML document definitions
 require_once 'FomlDoc.php';
 require_once 'FomlParseTree.php';
 require_once 'FomlParser.php';
-
+require_once 'FomlException.php';
 ?>

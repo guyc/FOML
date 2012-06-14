@@ -11,6 +11,12 @@ class FomlParseTree
         $this->text = $Text;
     }
 
+    /* 
+     * Converts the string in $Text into a parse
+     * tree with a FomlParseTree for each line, and
+     * all child-lines stored as an array of FomlParseTree's
+     * in $tree->children[]
+     */
     static function Parse($Text)
     {
         // stack keeps the ordered list of all open objects
@@ -48,7 +54,7 @@ class FomlParseTree
             $line = array_shift($lines);
             
             // join subsequent lines ending in "\s+|"
-            // ambigious: what if only a single line ends in \s|?
+            // What if only a single line ends in \s+|?
             // we treat it as a 1 line continuation (ie drop the |)
             if (preg_match($continuation, $line, $matches)) {
                 $line = $matches[1];
@@ -59,8 +65,9 @@ class FomlParseTree
                 }
             }
 
-            # only pure whitespace lines will be skipped here
-            if (preg_match("/^(\s*)([^\s].+)/", $line, $matches)) {
+            // requires at least one non-white character to match
+            // so pure whitespace lines will be skipped here
+            if (preg_match("/^(\s*)([^\s].*)/", $line, $matches)) {
                 $tree = new FomlParseTree();
                 $tree->indent = strlen($matches[1]);
                 $tree->text = $matches[2];
@@ -70,7 +77,24 @@ class FomlParseTree
         return $nodes;
     }
 
-    // Generates a FomlDoc from the parse tree
+    /*
+     * Flatten this node and all of its children to plain text
+     */
+    function ToText()
+    {
+        $text = $this->text;
+        foreach ($this->children as $child) {
+            $text.=" ".$child->ToText();
+        }
+        return $text;
+    }
+
+    /*
+     * Generates a FomlDoc from the parse tree.
+     * Returns a FomlDoc().  Walks the FomlParseTree
+     * and generates a corresponding tree of FomlNode 
+     * objects.
+     */
     function Generate()
     {
         // The top node of the tree is distinguised by having $text==null
@@ -91,11 +115,7 @@ class FomlParseTree
         }
         // TODO : assert $node is not null here
 
-        // Generate and add children to the node.
-        foreach ($this->children as $child) {
-            $childNode = $child->Generate();
-            $node->children[] = $childNode;
-        }
+        $node->AddChildren($this->children);
 
         return $node;
     }

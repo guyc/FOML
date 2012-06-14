@@ -1,11 +1,10 @@
 <?php
 class FomlParser 
 {
-    static $DEFAULT_NAMESPACE = "fo";
     static $NODE_CLASSES = array(
                                  'FomlExecNode',
-                                 'FomlInsertNode',
-                                 'FomlTagNode',
+                                 'FomlEvalNode',
+                                 'FomlElementNode',
                                  'FomlCommentNode',
                                  'FomlDoctypeNode',
                                  'FomlFilterNode',
@@ -13,7 +12,8 @@ class FomlParser
                                  );
 
     static $FILTER_CLASSES = array(
-                                   'include' => 'FomlIncludeFilter'
+                                   'include' => 'FomlIncludeFilter',
+                                   'namespace' => 'FomlNamespaceFilter'
                                    );
 
     // returns a FomlDocument instance

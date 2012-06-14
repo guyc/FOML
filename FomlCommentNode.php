@@ -18,5 +18,14 @@ class FomlCommentNode extends FomlNode
     {
         print "-->\n";
     }
+
+    function AddChildren($Children)
+    {
+        // don't add children to the tree, but flatten all children
+        // out into one big comment.
+        foreach ($Children as $child) {
+            $this->text .= " ".$child->ToText();
+        }
+    }
 }
 ?>
