@@ -48,7 +48,9 @@ class FomlParseTree
     static function ParseLines($Text)
     {
         $continuation = "/(.*)\s+\|$/";
-        $lines = preg_split('/$\R?^/m', $Text);
+        //$lines = preg_split('/$\R?^/m', $Text);
+	$lines = preg_split('/\r?\n/m', $Text);
+	//Dump($lines);
         $nodes = array();
         while (!empty($lines)) {
             $line = array_shift($lines);
@@ -74,6 +76,7 @@ class FomlParseTree
                 $nodes[] = $tree;
             }
         }
+	//Dump($nodes);
         return $nodes;
     }
 
