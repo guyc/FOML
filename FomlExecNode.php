@@ -33,17 +33,17 @@ class FomlExecNode extends FomlNode
     function RenderPrefix()
     {
         print $this->code;
-        if ($this->hasBlock) {
-            print "{";
+        if ($this->hasBlock && count($this->children)>0) {
+            print "{\n";
         } else {
-            print ";";
+            print ";\n";
         }
     }
 
     function RenderSuffix()
     {
-        if ($this->hasBlock) {
-            print "}";
+        if ($this->hasBlock && count($this->children)>0) {
+            print "}\n";
         }
     }
 }

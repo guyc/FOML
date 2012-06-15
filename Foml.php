@@ -29,6 +29,17 @@ class Foml
     // and return a temporary filename instead of a string.
     static function GenerateXslFo($Template, $Args=null)
     {
+        //Dump($_php); exit;
+        ob_start();
+        Foml::RenderFoml($Template, $Args);
+        $xslFo = ob_get_contents();
+        ob_end_clean();
+        //Dump($xslFo); exit;
+        return $xslFo;
+    }
+
+    static function RenderFoml($Template, $Args)
+    {
         // import variables
         if ($Args) {
             foreach ($Args as $key=>$value) {
@@ -36,14 +47,9 @@ class Foml
             }
         }
         $_php = Foml::GeneratePhp($Template);
-
-        //Dump($_php); exit;
-        ob_start();
+        //Dump(htmlspecialchars($_php));
         eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
-        $xslFo = ob_get_contents();
-        ob_end_clean();
-        //Dump($xslFo); exit;
-        return $xslFo;
+        
     }
 
     static function TempName($Prefix)
@@ -67,8 +73,38 @@ class Foml
         $escapedPdfFileName = escapeshellarg($pdfFileName);
         $escapedXslFoFileName = escapeshellarg($xslFoFileName);
         $fop = dirname(__FILE__).'/'.Foml::$fopExec;
+
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName}";
-        shell_exec($cmd);
+        
+        $outFile = Foml::TempName("stdout-");
+        $errFile = Foml::TempName("stderr-");
+        $descriptors = array(0=>array("pipe", "r"),
+                             1=>array("file", $outFile, "w"),
+                             2=>array("file", $errFile, "w"),
+                             );
+        $proc = proc_open($cmd, $descriptors, $pipes);
+        if (!is_resource($proc)) {
+            // TODO - raise exception here?
+            print "Failure opening process"; exit;
+        }
+
+        fclose($pipes[0]);  // close stdin without sending anything
+
+        $exit = proc_close($proc);
+        if ($exit!=0) {
+            $stdout = file($outFile);
+            $stderr = file($errFile);
+            unlink($outFile);
+            unlink($errFile);
+            Dump("result={$exit}");
+            Dump(join($stdout,""));
+            Dump(join($stderr,""));
+            Dump(htmlspecialchars($xslFo));
+            exit;
+        }
+
+        unlink($outFile);
+        unlink($errFile);
 
         if (!Foml::$keepTempFiles) unlink($xslFoFileName);
 
