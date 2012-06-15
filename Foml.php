@@ -47,7 +47,7 @@ class Foml
             }
         }
         $_php = Foml::GeneratePhp($Template);
-        //Dump(htmlspecialchars($_php));
+        //Dump(htmlspecialchars($_php)); return;
         eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
         
     }
@@ -96,10 +96,11 @@ class Foml
             $stderr = file($errFile);
             unlink($outFile);
             unlink($errFile);
+            Dump("cmd={$cmd}");
             Dump("result={$exit}");
             Dump(join($stdout,""));
             Dump(join($stderr,""));
-            Dump(htmlspecialchars($xslFo));
+            Dump(htmlspecialchars($XslFo));
             exit;
         }
 

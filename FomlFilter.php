@@ -11,7 +11,7 @@ class FomlFilter
     {
     }
 
-    function Render($Indent=0)
+    function Render()
     {
         $this->RenderPrefix();
         foreach ($this->children as $child) {
