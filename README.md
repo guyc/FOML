@@ -38,8 +38,9 @@ Your installation will have a directory structure something like this:
 Fonts
 -----
 
-FOML supports custom TTF fonts and embedded fonts.  The one slightly complex aspect of adding additional
-fonts is setting file system permissions to allow the font cache to be updated, since Fop will be executed
+FOML supports custom TTF fonts and embedding fonts in PDF files.  One important consideration
+when using custom fonts is setting file permissions to ensure that 
+the font cache can be saved, since Fop will generally be run
 in the context of the web server, running as user ```httpd``` or ```www``` for example.
 
 The steps for adding custom fonts are:
