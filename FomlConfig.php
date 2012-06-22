@@ -25,6 +25,7 @@ require_once 'FomlIncludeFilter.php';
 require_once 'FomlNamespaceFilter.php';
 
 // FOML document definitions
+require_once 'FomlRenderState.php';
 require_once 'FomlDoc.php';
 require_once 'FomlParseTree.php';
 require_once 'FomlParser.php';
