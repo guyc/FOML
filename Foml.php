@@ -63,6 +63,8 @@ class Foml
     // The file must be unlinked by the caller.
     static function XslFoToPdf($XslFo)
     {
+        $fomlDir = dirname(__FILE__);
+        $confFileName = "fop.xconf";
         $pdfFileName = Foml::TempName("pdf-");
         $xslFoFileName = Foml::TempName("xslfo-");
 
@@ -72,17 +74,31 @@ class Foml
 
         $escapedPdfFileName = escapeshellarg($pdfFileName);
         $escapedXslFoFileName = escapeshellarg($xslFoFileName);
-        $fop = dirname(__FILE__).'/'.Foml::$fopExec;
+        $escapedConfFileName = escapeshellarg($confFileName);
+        $fop = Foml::$fopExec;
 
-        $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName}";
-        
+        // We set the cwd to the directory this file is in for the subprocess.
+        // This allows us to use relative a path in fop.xconf to the fonts directory
+        // so we don't have to edit the conf file depending on our installation path.
+        $cwd = $fomlDir;
+
+        $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
+        $env = $_ENV;
+        // Fop tries to create a font cache at [user.home]/.fop/fop-fonts.cache
+        // see: https://github.com/apache/fop/blob/trunk/src/java/org/apache/fop/fonts/FontCache.java
+        // Because the apache-user doesn't have a home directory, this causes a fatal error unless we
+        // specify a new user.home value in FOP_OPTS.  Note that for the cache to work
+        // you should create FOML/.fop and make it writable by the webserver user.
+        $env['FOP_OPTS'] = "-Duser.home={$fomlDir}";
+
         $outFile = Foml::TempName("stdout-");
         $errFile = Foml::TempName("stderr-");
         $descriptors = array(0=>array("pipe", "r"),
                              1=>array("file", $outFile, "w"),
-                             2=>array("file", $errFile, "w"),
+                             2=>array("file", $errFile, "w")
                              );
-        $proc = proc_open($cmd, $descriptors, $pipes);
+
+        $proc = proc_open($cmd, $descriptors, $pipes, $cwd, $env);
         if (!is_resource($proc)) {
             // TODO - raise exception here?
             print "Failure opening process"; exit;

@@ -18,8 +18,7 @@ Installation
 
 1. Clone the FOML repository into your PHP code library.
 
-2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html)
-
+2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html).
  
 3. Untar the FOP binaries into a subdirectory inside the FOML directory.
 
@@ -35,6 +34,30 @@ Your installation will have a directory structure something like this:
        +--fop-1.0/
           +--fop    (this it the fop executable)
 ```
+
+Fonts
+-----
+
+FOML supports custom TTF fonts and embedded fonts.  The one slightly complex aspect of adding additional
+fonts is setting file system permissions to allow the font cache to be updated, since Fop will be executed
+in the context of the web server, running as user ```httpd``` or ```www``` for example.
+
+The steps for adding custom fonts are:
+
+1. Download your font to FOML/fonts.
+
+2. Ensure that FOML/.fop is writable by the http user.
+
+3. Reference your font in FOML like this: ```%block(font-family="Droid Sans")```
+
+By default any custom fonts you download will be embedded in the generated PDF.
+When using TTF fonts, only the glyphs actually used will be embedded.
+
+If you find it necessary to tweak the directory layout for fonts or the font cache, the key things to know are:
+
+ - the font directory is specified in ```FOML/fop.xconf``` and is relative to the FOML directory, which will be the cwd when Fop is executed, and
+
+ - the font cache directory is ```.fop/fop-fonts.cache```, and is relative to the value of Java's ```user.home``` which is set explicitly in Foml::XslFoToPdf to the FOML directory.
 
 Usage
 -----
@@ -201,3 +224,4 @@ The :include filter takes one argument; the name of the file to be included.
 ```
  :include('Filename.foml')
 ```
+
