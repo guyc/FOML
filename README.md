@@ -55,7 +55,13 @@ The steps for adding custom fonts are:
 
 2. Ensure that FOML/.fop is writable by the http user.
 
-3. Reference your font in FOML like this: ```%block(font-family="Droid Sans")```
+3. Uncomment the following lines in fop.xconf:
+```
+<directory>fonts</directory>
+<auto-detect/>
+```
+
+4. Reference your font in FOML like this: ```%block(font-family="Droid Sans")```
 
 By default any custom fonts you download will be embedded in the generated PDF.
 When using TTF fonts, only the glyphs actually used will be embedded.
@@ -89,6 +95,49 @@ Expands the FOML document file named by $Template, making the values passed in $
 as local variables during the expansion.  Finally the resulting PDF document is streamed as an attachment
 with the $Filename supplied as the default filename.  Generally this will cause browser to prompt the user
 to save the PDF file.
+
+What's Missing
+==============
+
+Although I am already using this library in production, it has some missing features.  The most
+significant weakness is the lack of variable expansion within node parameters.  You can current do this:
+```
+ %table-column(column-width="30mm")
+```
+but not this
+```
+ %table-column(column-width="#{$width}mm")
+```            
+
+In these cases you can revert to using php to generate the XML like this:
+
+```
+  = "<fo:table-column column-width=\"#{$width}mm\">"
+  ...
+  = "</fo:table-column>"
+```
+
+This same parser weakness exhibits in another way.  For now
+we are using a simple regex to parse the tag parameters instead of a
+quote-and-escape-aware parser.  The parser searches greedily for the closing ')'
+which means that while this works okay:
+
+```
+%external-graphic(src="url('https://secure.gravatar.com/avatar/5c914fce9c8e2eaa6dfdde5f22106d74?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png')")/
+```
+
+This doesn't
+
+```
+%fo:block(border-after-style="solid") = join("",array("Thao","Vang","Lor"))
+```
+
+so for now you need to put the inner content on a separate line like this:
+
+```
+%fo:block(border-after-style="solid") 
+  = join("",array("Thao","Vang","Lor"))
+```
 
 FOML Syntax
 ===========

@@ -34,7 +34,8 @@ class FomlElementNode extends FomlNode
         // %fo:block(border-after-style="solid") = join(" ",array("Thao","Vang","Lor"))
         // but will not correctly match all possible uses of brackets and does not support
         // expansion of inline evaluation contexts #{$variable}
-        if (preg_match("/^\((.*?)\)(.*)/", $Args, $matches)) {
+        // For now switch to hungry because it is harder to work around that deficiency
+        if (preg_match("/^\((.*)\)(.*)/", $Args, $matches)) {
             //print "<pre>"; print_r($matches); print "</pre>";
             $this->args = $matches[1];
             $Args = $matches[2];

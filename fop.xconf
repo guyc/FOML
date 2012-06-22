@@ -43,8 +43,10 @@ the location of this file.
       </filterList>
 
       <fonts>
+        <!--
         <directory>fonts</directory>
         <auto-detect/>
+        -->
 
         <!-- embedded fonts -->
         <!--
