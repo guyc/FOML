@@ -33,10 +33,12 @@ Your installation will have a directory structure something like this:
 ```
   +-application/
     +--FOML/
+       +--.fop/
        +--examples/
           +--foml/
+       +--fonts/
        +--fop-1.0/
-          +--fop    (this it the fop executable)
+          +--fop    (this is a shell script that launches fop)
 ```
 
 Fonts
