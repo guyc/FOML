@@ -22,7 +22,11 @@ Installation
  
 3. Untar the FOP binaries into a subdirectory inside the FOML directory.
 
-4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  "fop-1.0/fop -version" should generate a version number.
+4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  ```fop-1.0/fop -version``` should generate a version number.
+```
+%fop-1.0/fop -version
+FOP Version 1.0
+```
 
 Your installation will have a directory structure something like this:
 
