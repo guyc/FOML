@@ -17,16 +17,17 @@ class FomlParser
                                    );
 
     // returns a FomlDocument instance
-    static function ParseFile($FileName)
+    static function ParseFile($FileName, $State=null)
     {
         $foml = file_get_contents($FileName);
-        return FomlParser::ParseString($foml);
+        return FomlParser::ParseString($foml, $State);
     }
 
-    static function ParseString($Foml)
+    static function ParseString($Foml, $State)
     {
         $tree = FomlParseTree::Parse($Foml);
         $doc = $tree->Generate();
+        if ($State) $doc->state = $State;  // for subdocuments, pass the parent document state along
         return $doc->RenderToString();  // returns php code
     }
 }

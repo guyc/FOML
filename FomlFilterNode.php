@@ -17,7 +17,7 @@ class FomlFilterNode extends FomlNode
         if (isset(FomlParser::$FILTER_CLASSES[$filter]))
         {
             $filterClass = FomlParser::$FILTER_CLASSES[$filter];
-            $this->filter  = new $filterClass($args);
+            $this->filter  = new $filterClass($this, $args);
         } else {
             throw new FomlException("Unknown filter '{$filter}'");
         }

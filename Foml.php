@@ -29,12 +29,10 @@ class Foml
     // and return a temporary filename instead of a string.
     static function GenerateXslFo($Template, $Args=null)
     {
-        //Dump($_php); exit;
         ob_start();
         Foml::RenderFoml($Template, $Args);
         $xslFo = ob_get_contents();
         ob_end_clean();
-        //Dump($xslFo); exit;
         return $xslFo;
     }
 
