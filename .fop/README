@@ -1,0 +1,4 @@
+This directory is used by Apache FOP to store the font 
+cache "fop-fonts.cache".  If you are using custom fonts,
+set directory permissions to allow the httpd user to write
+to this directory.

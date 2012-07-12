@@ -3,8 +3,9 @@ class FomlNamespaceFilter extends FomlFilter
 {
     public $namespace;
 
-    function __construct($Arg)
+    function __construct($Arg, $Node)
     {
+        parent::__construct($Arg, $Node);
         $this->namespace = $Arg;
     }
     

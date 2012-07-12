@@ -3,6 +3,19 @@ class FomlFilter
 {
     public $children = array();
 
+    // $Node is an instance of parent FomlFilterNode.
+    // it is important because it contains a FomlRenderState 
+    // instance that indicates the current output mode of this
+    // document.
+    
+    // REVISIT - this expression should be evaluated 
+    // in the eval context where all variables are available.
+    function __construct($Node, $Arg)
+    {
+        $this->node = $Node;
+        $this->arg = $Arg;
+    }
+
     function RenderPrefix()
     {
     }

@@ -24,8 +24,8 @@
         -#----------------------------------------
         -# plain text
         -#----------------------------------------
-        / This should not appear in the output
-          and neither should this.
+        / This should be embedded as XML comments in the output
+          and so should this indented continuation.
 
         FOML Sampler
 
@@ -60,7 +60,7 @@
                 Binary
 
           %table-body
-            - for ($i=0;$i<64;$i++)
+            - for ($i=0;$i<=16;$i++)
               %table-row
                 %table-cell
                   %block 
@@ -83,7 +83,6 @@
         %fo:block(border-after-style="dashed") text in extension
         %fo:block(border-after-style="dashed") - print "execution context in extension"
         %fo:block(border-after-style="dashed") = "evaluation context in extension"
-        %fo:block(border-after-style="solid") = join(" ",array("Thao","Vang","Lor"))  
+        %fo:block(border-after-style="solid") 
+          = join(" ",array("Thao","Vang","Lor"))  
 
-:namespace(xsl)
-  %stylesheet

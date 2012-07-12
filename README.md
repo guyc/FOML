@@ -18,23 +18,59 @@ Installation
 
 1. Clone the FOML repository into your PHP code library.
 
-2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html)
-
+2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html).
  
 3. Untar the FOP binaries into a subdirectory inside the FOML directory.
 
-4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  "fop-1.0/fop -version" should generate a version number.
+4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  ```fop-1.0/fop -version``` should generate a version number.
+```
+%fop-1.0/fop -version
+FOP Version 1.0
+```
 
 Your installation will have a directory structure something like this:
 
 ```
   +-application/
     +--FOML/
+       +--.fop/
        +--examples/
           +--foml/
+       +--fonts/
        +--fop-1.0/
-          +--fop    (this it the fop executable)
+          +--fop    (this is a shell script that launches fop)
 ```
+
+Fonts
+-----
+
+FOML supports custom TTF fonts and embedding fonts in PDF files.  One important consideration
+when using custom fonts is setting file permissions to ensure that 
+the font cache can be saved, since Fop will generally be run
+in the context of the web server, running as user ```httpd``` or ```www``` for example.
+
+The steps for adding custom fonts are:
+
+1. Download your font to FOML/fonts.
+
+2. Ensure that FOML/.fop is writable by the http user.
+
+3. Uncomment the following lines in fop.xconf:
+```
+<directory>fonts</directory>
+<auto-detect/>
+```
+
+4. Reference your font in FOML like this: ```%block(font-family="Droid Sans")```
+
+By default any custom fonts you download will be embedded in the generated PDF.
+When using TTF fonts, only the glyphs actually used will be embedded.
+
+If you find it necessary to tweak the directory layout for fonts or the font cache, the key things to know are:
+
+ - the font directory is specified in ```FOML/fop.xconf``` and is relative to the FOML directory, which will be the cwd when Fop is executed, and
+
+ - the font cache directory is ```.fop/fop-fonts.cache```, and is relative to the value of Java's ```user.home``` which is set explicitly in Foml::XslFoToPdf to the FOML directory.
 
 Usage
 -----
@@ -59,6 +95,49 @@ Expands the FOML document file named by $Template, making the values passed in $
 as local variables during the expansion.  Finally the resulting PDF document is streamed as an attachment
 with the $Filename supplied as the default filename.  Generally this will cause browser to prompt the user
 to save the PDF file.
+
+What's Missing
+==============
+
+Although I am already using this library in production, it has some missing features.  The most
+significant weakness is the lack of variable expansion within node parameters.  You can current do this:
+```
+ %table-column(column-width="30mm")
+```
+but not this
+```
+ %table-column(column-width="#{$width}mm")
+```            
+
+In these cases you can revert to using php to generate the XML like this:
+
+```
+  = "<fo:table-column column-width=\"#{$width}mm\">"
+  ...
+  = "</fo:table-column>"
+```
+
+This same parser weakness exhibits in another way.  For now
+we are using a simple regex to parse the tag parameters instead of a
+quote-and-escape-aware parser.  The parser searches greedily for the closing ')'
+which means that while this works okay:
+
+```
+%external-graphic(src="url('https://secure.gravatar.com/avatar/5c914fce9c8e2eaa6dfdde5f22106d74?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png')")/
+```
+
+This doesn't
+
+```
+%fo:block(border-after-style="solid") = join("",array("Thao","Vang","Lor"))
+```
+
+so for now you need to put the inner content on a separate line like this:
+
+```
+%fo:block(border-after-style="solid") 
+  = join("",array("Thao","Vang","Lor"))
+```
 
 FOML Syntax
 ===========
@@ -201,3 +280,4 @@ The :include filter takes one argument; the name of the file to be included.
 ```
  :include('Filename.foml')
 ```
+

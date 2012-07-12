@@ -32,11 +32,13 @@ class FomlExecNode extends FomlNode
 
     function RenderPrefix()
     {
+        // The first \n is required to escape any trailing // or # comment.
+        // It would also be possible to end and restart the PHP code block to abort the comment.'
         print $this->code;
         if ($this->hasBlock && count($this->children)>0) {
-            print "{\n";
+            print "\n{\n";
         } else {
-            print ";\n";
+            print "\n;\n";
         }
     }
 

@@ -1,10 +1,15 @@
 <?php
 class FomlDoc extends FomlNode
 {
+    public $state;
+
+    function __construct()
+    {
+        $this->state = new FomlRenderState();
+    }
 
     function RenderToString()
     {
-        $this->state = new FomlRenderState();
         ob_start();
         $this->Render();
         $output = ob_get_contents();

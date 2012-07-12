@@ -1,0 +1,122 @@
+<style type="text/css" media="all">@import "bootstrap.css";</style>
+
+<div class="container"><div class="row"><div class="span10"><h1>FOML Sampler</h1><p>See <a href="https://github.com/guyc/FOML">the FOML Github repo</a> for details.</p><div style="margin-top:20px"><h3>Doctype Node</h3><p>All complete FOML documents should start with this as the first line.</p><div style="margin-left:40px"><h4>FOML</h4><pre>!!!</pre><h4>PHP</h4><pre>&lt;?php echo '&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;' ?&gt;</pre><h4>XSL-FO</h4><pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</pre></div></div><div style="margin-top:20px"><h3>Shell-style Comments</h3><p>HAML shell style comments are evaluated as PHP, and resolve to the rarely-used PHP shell-style comment.</p><div style="margin-left:40px"><h4>FOML</h4><pre>-# This generates no XSL-FO at all</pre><h4>PHP</h4><pre>&lt;?php # This generates no XSL-FO at all
+;
+ ?&gt;</pre><h4>XSL-FO</h4><pre></pre></div></div><div style="margin-top:20px"><h3>XML Comments</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>
+/ This should become an XML comment
+  and so should this indented continuation.
+</pre><h4>PHP</h4><pre>&lt;!--  This should become an XML comment and so should this indented continuation. --&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;!--  This should become an XML comment and so should this indented continuation. --&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Simple XML Node</h3><p>If a namespace is not explicitly defined, the fo namespace is used.</p><div style="margin-left:40px"><h4>FOML</h4><pre>%flow
+</pre><h4>PHP</h4><pre>&lt;fo:flow &gt;
+&lt;/fo:flow&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:flow &gt;
+&lt;/fo:flow&gt;
+</pre></div></div><div style="margin-top:20px"><h3>XML Node with an explicit namespace</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%xsl:stylesheet
+</pre><h4>PHP</h4><pre>&lt;xsl:stylesheet &gt;
+&lt;/xsl:stylesheet&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;xsl:stylesheet &gt;
+&lt;/xsl:stylesheet&gt;
+</pre></div></div><div style="margin-top:20px"><h3>XML Node self-closing</h3><p>End the tag with a "/" to make the node self-closing.</p><div style="margin-left:40px"><h4>FOML</h4><pre>%flow/</pre><h4>PHP</h4><pre>&lt;fo:flow /&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:flow /&gt;
+</pre></div></div><div style="margin-top:20px"><h3>XML Node with attributes</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%flow(flow-name=&quot;xsl-region-body&quot;)</pre><h4>PHP</h4><pre>&lt;fo:flow flow-name=&quot;xsl-region-body&quot;&gt;
+&lt;/fo:flow&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:flow flow-name=&quot;xsl-region-body&quot;&gt;
+&lt;/fo:flow&gt;
+</pre></div></div><div style="margin-top:20px"><h3>XML Node with explicit namespace, arguments and auto-close</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%fo:block(border-after-style=&quot;dashed&quot;) /</pre><h4>PHP</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;/&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;/&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Simple Text</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>We will rule over all this land, &amp; we will call it... &quot;This Land&quot;.</pre><h4>PHP</h4><pre>We will rule over all this land, &amp; we will call it... &quot;This Land&quot;.
+</pre><h4>XSL-FO</h4><pre>We will rule over all this land, &amp; we will call it... &quot;This Land&quot;.
+</pre></div></div><div style="margin-top:20px"><h3>Line Continuation</h3><p>Note that the final line must end with a pipe character too.</p><div style="margin-left:40px"><h4>FOML</h4><pre>
+%table(                            |
+  table-layout=&quot;fixed&quot;             |
+  width=&quot;100%&quot;                     |
+  border-collapse=&quot;separate&quot;       |
+  )                                |
+</pre><h4>PHP</h4><pre>&lt;fo:table                              table-layout=&quot;fixed&quot;              width=&quot;100%&quot;                      border-collapse=&quot;separate&quot;        &gt;
+&lt;/fo:table&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:table                              table-layout=&quot;fixed&quot;              width=&quot;100%&quot;                      border-collapse=&quot;separate&quot;        &gt;
+&lt;/fo:table&gt;
+</pre></div></div><div style="margin-top:20px"><h3>PHP Execution</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>- print &quot;hello&quot;</pre><h4>PHP</h4><pre>&lt;?php print &quot;hello&quot;
+;
+ ?&gt;</pre><h4>XSL-FO</h4><pre>hello</pre></div></div><div style="margin-top:20px"><h3>PHP Evaluation</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>= 24 * 60 * 60</pre><h4>PHP</h4><pre>&lt;?php print 24 * 60 * 60
+;
+ ?&gt;</pre><h4>XSL-FO</h4><pre>86400</pre></div></div><div style="margin-top:20px"><h3>PHP Conditionals</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>
+- $x = 4 * 4
+- if ($x&gt;15)
+  Thao
+- else
+  Vang
+</pre><h4>PHP</h4><pre>&lt;?php $x = 4 * 4
+;
+if ($x&gt;15)
+{
+ ?&gt;Thao
+&lt;?php }
+else
+{
+ ?&gt;Vang
+&lt;?php }
+ ?&gt;</pre><h4>XSL-FO</h4><pre>Thao
+</pre></div></div><div style="margin-top:20px"><h3>PHP Iteration</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>
+- for ($i=0;$i&lt;3;$i++)
+  %table-cell
+    %block
+      = $i * $i
+</pre><h4>PHP</h4><pre>&lt;?php for ($i=0;$i&lt;3;$i++)
+{
+ ?&gt;&lt;fo:table-cell &gt;
+&lt;fo:block &gt;
+&lt;?php print $i * $i
+;
+ ?&gt;&lt;/fo:block&gt;
+&lt;/fo:table-cell&gt;
+&lt;?php }
+ ?&gt;</pre><h4>XSL-FO</h4><pre>&lt;fo:table-cell &gt;
+&lt;fo:block &gt;
+0&lt;/fo:block&gt;
+&lt;/fo:table-cell&gt;
+&lt;fo:table-cell &gt;
+&lt;fo:block &gt;
+1&lt;/fo:block&gt;
+&lt;/fo:table-cell&gt;
+&lt;fo:table-cell &gt;
+&lt;fo:block &gt;
+4&lt;/fo:block&gt;
+&lt;/fo:table-cell&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Node with text follow-on</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%fo:block(border-after-style=&quot;dashed&quot;) text in extension</pre><h4>PHP</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+text in extension
+&lt;/fo:block&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+text in extension
+&lt;/fo:block&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Node with evaluation follow-on</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%fo:block(border-after-style=&quot;dashed&quot;) = 22/7 // evaluation in extension</pre><h4>PHP</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+&lt;?php print 22/7 // evaluation in extension
+;
+ ?&gt;&lt;/fo:block&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+3.1428571428571&lt;/fo:block&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Node with execution follow-on</h3><p></p><div style="margin-left:40px"><h4>FOML</h4><pre>%fo:block(border-after-style=&quot;dashed&quot;) - print 22/7 // execution in extension</pre><h4>PHP</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+&lt;?php print 22/7 // execution in extension
+;
+ ?&gt;&lt;/fo:block&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:block border-after-style=&quot;dashed&quot;&gt;
+3.1428571428571&lt;/fo:block&gt;
+</pre></div></div><div style="margin-top:20px"><h3>Special Case #1 : The Importance of New-Lines in Generated PHP</h3><p>This example illustrates why the automatically-generated semi-colon is preceeded by a new-line.  Without it the semi-colon would be commented out in this example.</p><div style="margin-left:40px"><h4>FOML</h4><pre>
+- $x = 22/7 // these slashes break the auto-semicolon logic
+= $x
+</pre><h4>PHP</h4><pre>&lt;?php $x = 22/7 // these slashes break the auto-semicolon logic
+;
+print $x
+;
+ ?&gt;</pre><h4>XSL-FO</h4><pre>3.1428571428571</pre></div></div><div style="margin-top:20px"><h3>Special Case #2 : Self-closing Node with child-nodes</h3><p>Indented subnodes of a self-closing nodes will NOT be enclosed by the closed node.  You wouldn't do this on purpose.</p><div style="margin-left:40px"><h4>FOML</h4><pre>%flow/
+  %inline
+    appears to be a child of flow</pre><h4>PHP</h4><pre>&lt;fo:flow /&gt;
+&lt;fo:inline &gt;
+appears to be a child of flow
+&lt;/fo:inline&gt;
+</pre><h4>XSL-FO</h4><pre>&lt;fo:flow /&gt;
+&lt;fo:inline &gt;
+appears to be a child of flow
+&lt;/fo:inline&gt;
+</pre></div></div></div></div></div>
