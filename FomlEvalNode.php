@@ -13,6 +13,6 @@ class FomlEvalNode extends FomlNode
     {
         print "print ";
         print $this->code;
-        print ";\n";
+        print "\n;\n";
     }
 }

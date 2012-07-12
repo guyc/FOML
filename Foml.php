@@ -47,7 +47,6 @@ class Foml
         $_php = Foml::GeneratePhp($Template);
         //Dump(htmlspecialchars($_php)); return;
         eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
-        
     }
 
     static function TempName($Prefix)
