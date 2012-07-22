@@ -2,6 +2,7 @@
 class FomlEvalNode extends FomlNode
 {
     public $mode = Foml::PHP_MODE;
+    public $xmlEscape = true;
     const MATCH_RE = "/^=\s*(.*)/";
 
     function __construct($Matches)
@@ -12,7 +13,13 @@ class FomlEvalNode extends FomlNode
     function RenderPrefix()
     {
         print "print ";
-        print $this->code;
+        // revisit - would be nice to be able to turn off htmlentities
+        if ($this->xmlEscape) {
+            print "htmlentities({$this->code},ENT_XML1)";
+        } else {
+            print $this->code;
+        }
+            
         print "\n;\n";
     }
 }
