@@ -15,7 +15,9 @@ class FomlEvalNode extends FomlNode
         print "print ";
         // revisit - would be nice to be able to turn off htmlentities
         if ($this->xmlEscape) {
-            print "htmlentities({$this->code},ENT_XML1)";
+            // This depends on PHP 5.4 or later
+            //print "htmlentities({$this->code},ENT_XML1)";
+            print "xmlentities({$this->code})";
         } else {
             print $this->code;
         }
