@@ -1,13 +1,5 @@
 <?php
 
-// PHP 5.4 and beyond supports XML via htmlentities, but for now we will escape manually. 
-// courtesy of 
-// http://stackoverflow.com/questions/3957360/generating-xml-document-in-php-escape-characters
-function xmlentities($string) {
-    return str_replace(array("&", "<", ">", "\"", "'"),
-                       array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"), $string);
-}
-
 /*
  * If you are NOT using a class autoloader 
  * you should require_once 'FomlConfig.php'
@@ -24,6 +16,15 @@ class Foml
     static $keepTempFiles = true;              // set to true for debugging
     static $pdfMimeType = "application/pdf";
     static $defaultNamespace = "fo";
+
+    // PHP 5.4 and beyond supports XML via htmlentities, but for now we will escape manually. 
+    // courtesy of 
+    // http://stackoverflow.com/questions/3957360/generating-xml-document-in-php-escape-characters
+    static function XmlEntities($string) {
+        return str_replace(array("&", "<", ">", "\"", "'"),
+                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+                           $string);
+    }
 
     static function GeneratePhp($Template)
     {
