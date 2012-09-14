@@ -96,6 +96,7 @@ class Foml
         // specify a new user.home value in FOP_OPTS.  Note that for the cache to work
         // you should create FOML/.fop and make it writable by the webserver user.
         $env['FOP_OPTS'] = "-Duser.home={$fomlDir}";
+        $env['FOP_OPTS'].- " -Xmx1024m";  // give the JVM extra memory - needed on small systems for complex documents
 
         $outFile = Foml::TempName("stdout-");
         $errFile = Foml::TempName("stderr-");
