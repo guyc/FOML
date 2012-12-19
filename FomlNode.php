@@ -21,6 +21,7 @@ class FomlNode
                 print "<?php ";
             }
         } elseif ($Mode == Foml::XML_MODE) {
+            assert($this->state);
             if ($this->state->mode == Foml::PHP_MODE) {
                 print " ?>";
             }

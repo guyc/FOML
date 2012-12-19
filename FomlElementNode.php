@@ -26,6 +26,25 @@ class FomlElementNode extends FomlNode
         $this->ParseExtra($extra);
     }
 
+    // replace instances of #{...} with [php] print($1);[/php]
+    function ExpandExpressions($Text)
+    {
+        $text = $Text;
+        $expansion = '';
+        while (preg_match("/\#\{(.*?)\}/", $text, $matches, PREG_OFFSET_CAPTURE)) {
+            $matchLength = $matches[0][1];  // including length of markup
+            $expression = $matches[1][0];
+            $expansion .= substr($text, 0, $matchLength);
+            $text = substr($text, $matchLength+strlen($matches[0][0]));
+            $expansion .= '<?';
+            $expansion .= 'php ';
+            $expansion .= "print({$expression});";
+            $expansion .= '?>';
+        }
+        $expansion.=$text;
+        return $expansion;
+    }
+
     function ParseArgs($Args)
     {
         // REVISIT - this is a piss-poor
@@ -37,8 +56,10 @@ class FomlElementNode extends FomlNode
         // For now switch to hungry because it is harder to work around that deficiency
         if (preg_match("/^\((.*)\)(.*)/", $Args, $matches)) {
             //print "<pre>"; print_r($matches); print "</pre>";
-            $this->args = $matches[1];
+            // REVISIT - this offers only minimal support for #{<phpexpression>}
+            $this->args = $this->ExpandExpressions($matches[1]);
             $Args = $matches[2];
+            //$Args = $matches[2];
         }
         return $Args;
     }

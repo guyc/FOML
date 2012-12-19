@@ -17,6 +17,15 @@ class Foml
     static $pdfMimeType = "application/pdf";
     static $defaultNamespace = "fo";
 
+    // PHP 5.4 and beyond supports XML via htmlentities, but for now we will escape manually. 
+    // courtesy of 
+    // http://stackoverflow.com/questions/3957360/generating-xml-document-in-php-escape-characters
+    static function XmlEntities($string) {
+        return str_replace(array("&", "<", ">", "\"", "'"),
+                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+                           $string);
+    }
+
     static function GeneratePhp($Template)
     {
         $fomlParser = new FomlParser();
@@ -88,11 +97,11 @@ class Foml
         // specify a new user.home value in FOP_OPTS.  Note that for the cache to work
         // you should create FOML/.fop and make it writable by the webserver user.
         $env['FOP_OPTS'] = "";
-        $env['FOP_OPTS'] = "-Duser.home={$fomlDir}";
+        $env['FOP_OPTS'].= "-Duser.home={$fomlDir}";
         // I was not able to get baseUrl or baseDir to work with relative paths for external-graphic nodes.
         // So instead we have changed the cwd to docRoot, and set a fully-qualified path for the configuration file.
         //$env['FOP_OPTS'].= " -DbaseUrl=file:///{$docRoot}";
-        $env['FOP_OPTS'].= " -Xmx512m";  // give the JVM extra memory - needed on small systems for complex documents
+        $env['FOP_OPTS'].- " -Xmx1024m";  // give the JVM extra memory - needed on small systems for complex documents
 
         $outFile = Foml::TempName("stdout-");
         $errFile = Foml::TempName("stderr-");
