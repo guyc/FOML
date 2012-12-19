@@ -11,7 +11,7 @@ class Foml
     const PHP_MODE = 'php';
     const XML_MODE = 'xml';
 
-    static $fopExec = "fop-1.0/fop";           // fopExec is relative to this directory
+    static $fopExec = "fop-1.1/fop";           // fopExec is relative to this directory
     static $tempDir = null;                    // defaults to system temp directory
     static $keepTempFiles = true;              // set to true for debugging
     static $pdfMimeType = "application/pdf";
@@ -61,7 +61,8 @@ class Foml
     static function XslFoToPdf($XslFo)
     {
         $fomlDir = dirname(__FILE__);
-        $confFileName = "fop.xconf";
+        $docRoot = GetIfSet($_SERVER, 'DOCUMENT_ROOT');
+        $confFileName = "{$fomlDir}/fop.xconf";
         $pdfFileName = Foml::TempName("pdf-");
         $xslFoFileName = Foml::TempName("xslfo-");
 
@@ -72,12 +73,12 @@ class Foml
         $escapedPdfFileName = escapeshellarg($pdfFileName);
         $escapedXslFoFileName = escapeshellarg($xslFoFileName);
         $escapedConfFileName = escapeshellarg($confFileName);
-        $fop = Foml::$fopExec;
+        $fop = $fomlDir.'/'.Foml::$fopExec;
 
         // We set the cwd to the directory this file is in for the subprocess.
         // This allows us to use relative a path in fop.xconf to the fonts directory
         // so we don't have to edit the conf file depending on our installation path.
-        $cwd = $fomlDir;
+        $cwd = $docRoot;
 
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
         $env = $_ENV;
@@ -86,7 +87,12 @@ class Foml
         // Because the apache-user doesn't have a home directory, this causes a fatal error unless we
         // specify a new user.home value in FOP_OPTS.  Note that for the cache to work
         // you should create FOML/.fop and make it writable by the webserver user.
+        $env['FOP_OPTS'] = "";
         $env['FOP_OPTS'] = "-Duser.home={$fomlDir}";
+        // I was not able to get baseUrl or baseDir to work with relative paths for external-graphic nodes.
+        // So instead we have changed the cwd to docRoot, and set a fully-qualified path for the configuration file.
+        //$env['FOP_OPTS'].= " -DbaseUrl=file:///{$docRoot}";
+        $env['FOP_OPTS'].= " -Xmx512m";  // give the JVM extra memory - needed on small systems for complex documents
 
         $outFile = Foml::TempName("stdout-");
         $errFile = Foml::TempName("stderr-");
@@ -95,6 +101,19 @@ class Foml
                              2=>array("file", $errFile, "w")
                              );
 
+        // to run from the command line use something like this:
+        //   setenv FOP_OPTS '-Duser.home=/usr/data/www/FOML -Xmx1024m'
+        //   /usr/data/www/FOML/fop-1.0/fop '/var/tmp/xslfo-tsy5I1' '/var/tmp/pdf-iqe6y5' -c '/usr/data/www/FOML/fop.xconf'
+        //
+        // to run TTFReader  
+        //    Note that metrics files are optional and no longer required
+        //    java -cp "lib/FOML/fop-1.1/build/fop.jar:lib/FOML/fop-1.1/lib/avalon-framework-4.2.0.jar:lib/FOML/fop-1.1/lib/commons-io-1.3.1.jar:lib/FOML/fop-1.1/lib/commons-logging-1.0.4.jar:lib/FOML/fop-1.1/lib/xmlgraphics-commons-1.4.jar" org.apache.fop.fonts.apps.TTFReader  input.ttf output.xml
+        //
+
+        //print_r(array('cmd'=>$cmd,
+        //'cwd'=>$cwd,
+        //'env'=>$env)); exit;
+        
         $proc = proc_open($cmd, $descriptors, $pipes, $cwd, $env);
         if (!is_resource($proc)) {
             // TODO - raise exception here?
@@ -116,7 +135,7 @@ class Foml
             Dump(htmlspecialchars($XslFo));
             exit;
         }
-
+        
         unlink($outFile);
         unlink($errFile);
 
@@ -156,6 +175,23 @@ class Foml
     {
         $headers = array("Content-Disposition: attachment; filename=\"{$Filename}\"");
         Foml::Render($Template, $Args, $headers);
+    }
+
+    static function XmlEntities($String)
+    {
+        return str_replace(array("&", "<", ">", "\"", "'"),
+                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+                           $String);
+    }
+
+    static function FormatText($Text)
+    {
+        $xlsFo = "";
+        foreach (preg_split('/(\r\n)|(\n\r)|\n|\r/', $Text) as $line) {
+            $xlsFo.= "<fo:block>".self::XmlEntities($line)."</fo:block>";
+        }
+        return $xlsFo;
+        
     }
 }
 
