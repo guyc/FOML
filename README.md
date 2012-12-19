@@ -19,13 +19,21 @@ Installation
 1. Clone the FOML repository into your PHP code library.
 
 2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html).
+```
+wget http://mirror.mel.bkb.net.au/pub/apache/xmlgraphics/fop/binaries/fop-1.1-bin.zip
+```
  
 3. Untar the FOP binaries into a subdirectory inside the FOML directory.
-
-4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  ```fop-1.0/fop -version``` should generate a version number.
 ```
-%fop-1.0/fop -version
-FOP Version 1.0
+unzip fop-1.1-bin.zip
+chmod ugo+x fop-1.1/fop
+rm fop-1.1-bin.zip
+```
+
+4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  ```fop-1.1/fop -version``` should generate a version number.
+```
+%fop-1.1/fop -version
+FOP Version 1.1
 ```
 
 Your installation will have a directory structure something like this:
@@ -37,7 +45,7 @@ Your installation will have a directory structure something like this:
        +--examples/
           +--foml/
        +--fonts/
-       +--fop-1.0/
+       +--fop-1.1/
           +--fop    (this is a shell script that launches fop)
 ```
 

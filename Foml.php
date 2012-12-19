@@ -20,7 +20,8 @@ class Foml
     // PHP 5.4 and beyond supports XML via htmlentities, but for now we will escape manually. 
     // courtesy of 
     // http://stackoverflow.com/questions/3957360/generating-xml-document-in-php-escape-characters
-    static function XmlEntities($string) {
+    static function XmlEntities($string) 
+    {
         return str_replace(array("&", "<", ">", "\"", "'"),
                            array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
                            $string);
@@ -87,6 +88,9 @@ class Foml
         // We set the cwd to the directory this file is in for the subprocess.
         // This allows us to use relative a path in fop.xconf to the fonts directory
         // so we don't have to edit the conf file depending on our installation path.
+        // REVISITED:
+        // I was not able to get baseUrl or baseDir to work with relative paths for external-graphic nodes.
+        // So instead we have changed the cwd to docRoot, and set a fully-qualified path for the configuration file.
         $cwd = $docRoot;
 
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
@@ -98,10 +102,7 @@ class Foml
         // you should create FOML/.fop and make it writable by the webserver user.
         $env['FOP_OPTS'] = "";
         $env['FOP_OPTS'].= "-Duser.home={$fomlDir}";
-        // I was not able to get baseUrl or baseDir to work with relative paths for external-graphic nodes.
-        // So instead we have changed the cwd to docRoot, and set a fully-qualified path for the configuration file.
-        //$env['FOP_OPTS'].= " -DbaseUrl=file:///{$docRoot}";
-        $env['FOP_OPTS'].- " -Xmx1024m";  // give the JVM extra memory - needed on small systems for complex documents
+        $env['FOP_OPTS'].= " -Xmx1024m";  // give the JVM extra memory - needed on small systems for complex documents
 
         $outFile = Foml::TempName("stdout-");
         $errFile = Foml::TempName("stderr-");
@@ -184,13 +185,6 @@ class Foml
     {
         $headers = array("Content-Disposition: attachment; filename=\"{$Filename}\"");
         Foml::Render($Template, $Args, $headers);
-    }
-
-    static function XmlEntities($String)
-    {
-        return str_replace(array("&", "<", ">", "\"", "'"),
-                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
-                           $String);
     }
 
     static function FormatText($Text)
