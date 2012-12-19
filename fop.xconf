@@ -43,6 +43,7 @@ the location of this file.
       </filterList>
 
       <fonts>
+          <directory>/data/www/FOML/fonts</directory>
         <!--
         <directory>fonts</directory>
         <auto-detect/>
