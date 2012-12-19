@@ -11,8 +11,8 @@ class FomlEvalNode extends FomlNode
 
     function RenderPrefix()
     {
-        print "print ";
+        print "print Foml::XmlEntities(";
         print $this->code;
-        print "\n;\n";
+        print ");\n";
     }
 }
