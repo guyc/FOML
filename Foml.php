@@ -95,6 +95,13 @@ class Foml
 
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
         $env = $_ENV;
+
+        // It seems that something changed (at FreeBSD 9.1?) that means that apache no longer
+        // has /usr/local/bin in the path by default.  We add it here for fop because that is where
+        // Diablo Java(TM) SE Runtime Environment (build 1.6.0_07-b02)
+        // is installed.
+        $env['PATH'].= ':/usr/local/bin';
+
         // Fop tries to create a font cache at [user.home]/.fop/fop-fonts.cache
         // see: https://github.com/apache/fop/blob/trunk/src/java/org/apache/fop/fonts/FontCache.java
         // Because the apache-user doesn't have a home directory, this causes a fatal error unless we
@@ -154,10 +161,16 @@ class Foml
         return $pdfFileName;
     }
 
-    static function Render($Template, $Args=null, $Headers=null)
+    static function RenderToFile($Template, $Args)
     {
         $xslFo = Foml::GenerateXslFo($Template, $Args);
         $pdfFileName = Foml::XslFoToPdf($xslFo);
+        return $pdfFileName;
+    }
+
+    static function Render($Template, $Args=null, $Headers=null)
+    {
+        $pdfFileName = self::RenderToFile($Template, $Args);
         $size = filesize($pdfFileName);
         $pdfMimeType = Foml::$pdfMimeType;
 
