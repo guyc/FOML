@@ -44,6 +44,7 @@ the location of this file.
 
       <fonts>
           <directory>/data/www/FOML/fonts</directory>
+          <!-- auto-detect will add the system default font paths to the font search path -->
         <!--
         <directory>fonts</directory>
         <auto-detect/>
