@@ -3,11 +3,12 @@ class FomlEvalNode extends FomlNode
 {
     public $mode = Foml::PHP_MODE;
     public $xmlEscape = true;
-    const MATCH_RE = "/^=\s*(.*)/";
+    const MATCH_RE = "/^=(=?)\s*(.*)/";
 
     function __construct($Matches)
     {
-        $this->code = $Matches[1];
+        $this->code = $Matches[2];
+	$this->xmlEscape = false; // $Matches[1] == '=';
     }
 
     function RenderPrefix()
