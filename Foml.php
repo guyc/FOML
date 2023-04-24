@@ -147,8 +147,8 @@ class Foml
             unlink($errFile);
             Dump("cmd={$cmd}");
             Dump("result={$exit}");
-            Dump(join($stdout,""));
-            Dump(join($stderr,""));
+            Dump($stdout);
+            Dump($stderr);
             Dump(htmlspecialchars($XslFo));
             exit;
         }
