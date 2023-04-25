@@ -100,7 +100,12 @@ class Foml
         // has /usr/local/bin in the path by default.  We add it here for fop because that is where
         // Diablo Java(TM) SE Runtime Environment (build 1.6.0_07-b02)
         // is installed.
-        $env['PATH'].= ':/usr/local/bin';
+
+	if (array_key_exists('PATH', $env)) {
+	        $env['PATH'].= ':/usr/local/bin';
+	} else {
+	        $env['PATH'] = '/usr/local/bin';
+	}
 
         // Fop tries to create a font cache at [user.home]/.fop/fop-fonts.cache
         // see: https://github.com/apache/fop/blob/trunk/src/java/org/apache/fop/fonts/FontCache.java
