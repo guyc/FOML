@@ -110,6 +110,7 @@ class Foml
 	} else {
 	        $env['PATH'] = '/usr/local/bin';
 	}
+        // $env['PATH'].= ':/usr/local/bin';
 
         // Fop tries to create a font cache at [user.home]/.fop/fop-fonts.cache
         // see: https://github.com/apache/fop/blob/trunk/src/java/org/apache/fop/fonts/FontCache.java
@@ -166,7 +167,6 @@ class Foml
         unlink($errFile);
 
         if (!Foml::$keepTempFiles) unlink($xslFoFileName);
-
         return $pdfFileName;
     }
 
@@ -184,10 +184,11 @@ class Foml
         $pdfMimeType = Foml::$pdfMimeType;
 
         if ($Headers) {
-            foreach ($Headers as $header) {
-                header($header);
+            foreach ($Headers as $key=>$value) {
+                header("{$key}: {$value}");
             }
         }
+
         header("Content-Length: {$size}");
         header("Content-Type: {$pdfMimeType}");
 
