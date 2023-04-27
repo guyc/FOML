@@ -6,6 +6,10 @@
  * to pre-load all of the Foml classes.
  */
 
+ function foml_escape($Var) {
+    return htmlentities($Var, ENT_QUOTES | ENT_SUBSTITUTE | ENT_XML1);
+ }
+
 class Foml
 {
     const PHP_MODE = 'php';
