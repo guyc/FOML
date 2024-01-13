@@ -1,7 +1,7 @@
 <?php
 class FomlIncludeFilter extends FomlFilter
 {
-    public $args;
+    public $arg;
 
     function RenderPrefix()
     {
