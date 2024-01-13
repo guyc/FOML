@@ -2,6 +2,8 @@
 class FomlFilter
 {
     public $children = array();
+    public $node;
+    public $arg;
 
     // $Node is an instance of parent FomlFilterNode.
     // it is important because it contains a FomlRenderState 
