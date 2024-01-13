@@ -7,7 +7,7 @@
  */
 
  function foml_escape($Var) {
-    return htmlentities($Var, ENT_QUOTES | ENT_SUBSTITUTE | ENT_XML1);
+    return $Var == null ? $Var : htmlentities($Var, ENT_QUOTES | ENT_SUBSTITUTE | ENT_XML1);
  }
 
 class Foml
