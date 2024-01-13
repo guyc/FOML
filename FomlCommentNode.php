@@ -1,6 +1,7 @@
 <?php 
 class FomlCommentNode extends FomlNode
 {
+    public $text;
     const MATCH_RE = "/^\/(.*)/";
     
     function __construct($Matches)

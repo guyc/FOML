@@ -1,6 +1,7 @@
 <?php
 class FomlEvalNode extends FomlNode
 {
+    public $code;
     public $mode = Foml::PHP_MODE;
     public $xmlEscape = true;
     const MATCH_RE = "/^=(=?)\s*(.*)/";
