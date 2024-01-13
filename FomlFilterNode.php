@@ -9,6 +9,7 @@ class FomlFilterNode extends FomlNode
     const MATCH_RE = "/^:([a-zA-Z0-9]+)(\((.*)\))?/";
 
     public $filterClass;
+    public $filter;
 
     function __construct($Matches)
     {
