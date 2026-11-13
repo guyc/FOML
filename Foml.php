@@ -134,10 +134,10 @@ class Foml
         //    java -cp "lib/FOML/fop-1.1/build/fop.jar:lib/FOML/fop-1.1/lib/avalon-framework-4.2.0.jar:lib/FOML/fop-1.1/lib/commons-io-1.3.1.jar:lib/FOML/fop-1.1/lib/commons-logging-1.0.4.jar:lib/FOML/fop-1.1/lib/xmlgraphics-commons-1.4.jar" org.apache.fop.fonts.apps.TTFReader  input.ttf output.xml
         //
 
-        //print_r(array('cmd'=>$cmd,
-        //'cwd'=>$cwd,
-        //'env'=>$env)); exit;
-        
+        // print_r(array('cmd'=>$cmd,
+        // 'cwd'=>$cwd,
+        // 'env'=>$env)); exit;
+
         $proc = proc_open($cmd, $descriptors, $pipes, $cwd, $env);
         if (!is_resource($proc)) {
             // TODO - raise exception here?
