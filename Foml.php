@@ -100,17 +100,14 @@ class Foml
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
         $env = $_ENV;
 
-        // It seems that something changed (at FreeBSD 9.1?) that means that apache no longer
-        // has /usr/local/bin in the path by default.  We add it here for fop because that is where
-        // Diablo Java(TM) SE Runtime Environment (build 1.6.0_07-b02)
-        // is installed.
-
-	if (array_key_exists('PATH', $env)) {
-	        $env['PATH'].= ':/usr/local/bin';
-	} else {
-	        $env['PATH'] = '/usr/local/bin';
-	}
-        // $env['PATH'].= ':/usr/local/bin';
+        // fop finds java with `which java`, and php-fpm/apache often run with a minimal PATH.
+        // Java lives in /usr/local/bin on some hosts and /usr/bin on others, so add both -
+        // a directory that doesn't exist is just skipped.
+        $paths = array_filter(explode(':', $env['PATH'] ?? ''));
+        foreach (array('/usr/local/bin', '/usr/bin') as $dir) {
+            if (!in_array($dir, $paths)) $paths[] = $dir;
+        }
+        $env['PATH'] = join(':', $paths);
 
         // Fop tries to create a font cache at [user.home]/.fop/fop-fonts.cache
         // see: https://github.com/apache/fop/blob/trunk/src/java/org/apache/fop/fonts/FontCache.java
