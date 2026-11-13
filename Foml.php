@@ -17,7 +17,7 @@ class Foml
 
     static $fopExec = "fop-1.1/fop";           // fopExec is relative to this directory
     static $tempDir = null;                    // defaults to system temp directory
-    static $keepTempFiles = true;              // set to true for debugging
+    static $keepTempFiles = false;             // set to true for debugging
     static $pdfMimeType = "application/pdf";
     static $defaultNamespace = "fo";
 
@@ -206,7 +206,8 @@ class Foml
 
     static function RenderAttachment($Template, $Filename, $Args=null)
     {
-        $headers = array("Content-Disposition: attachment; filename=\"{$Filename}\"");
+        $Filename = str_replace(array('"', "\r", "\n"), '', $Filename);  // keep the header well formed
+        $headers = array("Content-Disposition" => "attachment; filename=\"{$Filename}\"");
         Foml::Render($Template, $Args, $headers);
     }
 
