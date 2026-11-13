@@ -15,7 +15,7 @@ class Foml
     const PHP_MODE = 'php';
     const XML_MODE = 'xml';
 
-    static $fopExec = "fop-1.1/fop";           // fopExec is relative to this directory
+    static $fopExec = "fop/fop";               // relative to this directory; fop is a symlink made by install-fop.sh
     static $tempDir = null;                    // defaults to system temp directory
     static $keepTempFiles = false;             // set to true for debugging
     static $pdfMimeType = "application/pdf";
@@ -84,18 +84,21 @@ class Foml
         fwrite($xslFile, $XslFo);
         fclose($xslFile);
 
+        // Relative URIs in templates (e.g. external-graphic src="url(forms/Logo.png)") are relative
+        // to the app's document root.  FOP 2.x resolves them against the config's <base>, which it
+        // reads relative to the config file, not the cwd, so write a per-call copy of the config
+        // with an absolute base.  FOP 1.1 accepts this too.
+        $cwd = $docRoot ?: getcwd();
+        $baseUri = 'file://' . str_replace('%2F', '/', rawurlencode(rtrim($cwd, '/'))) . '/';
+        $conf = preg_replace('#<base>.*?</base>#s', '<base>' . Foml::XmlEntities($baseUri) . '</base>',
+                             file_get_contents($confFileName), 1);
+        $confFileName = Foml::TempName("xconf-");
+        file_put_contents($confFileName, $conf);
+
         $escapedPdfFileName = escapeshellarg($pdfFileName);
         $escapedXslFoFileName = escapeshellarg($xslFoFileName);
         $escapedConfFileName = escapeshellarg($confFileName);
         $fop = $fomlDir.'/'.Foml::$fopExec;
-
-        // We set the cwd to the directory this file is in for the subprocess.
-        // This allows us to use relative a path in fop.xconf to the fonts directory
-        // so we don't have to edit the conf file depending on our installation path.
-        // REVISITED:
-        // I was not able to get baseUrl or baseDir to work with relative paths for external-graphic nodes.
-        // So instead we have changed the cwd to docRoot, and set a fully-qualified path for the configuration file.
-        $cwd = $docRoot;
 
         $cmd = "{$fop} {$escapedXslFoFileName} {$escapedPdfFileName} -c {$escapedConfFileName}";
         $env = $_ENV;
@@ -127,11 +130,7 @@ class Foml
 
         // to run from the command line use something like this:
         //   setenv FOP_OPTS '-Duser.home=/usr/data/www/FOML -Xmx1024m'
-        //   /usr/data/www/FOML/fop-1.0/fop '/var/tmp/xslfo-tsy5I1' '/var/tmp/pdf-iqe6y5' -c '/usr/data/www/FOML/fop.xconf'
-        //
-        // to run TTFReader  
-        //    Note that metrics files are optional and no longer required
-        //    java -cp "lib/FOML/fop-1.1/build/fop.jar:lib/FOML/fop-1.1/lib/avalon-framework-4.2.0.jar:lib/FOML/fop-1.1/lib/commons-io-1.3.1.jar:lib/FOML/fop-1.1/lib/commons-logging-1.0.4.jar:lib/FOML/fop-1.1/lib/xmlgraphics-commons-1.4.jar" org.apache.fop.fonts.apps.TTFReader  input.ttf output.xml
+        //   /usr/data/www/FOML/fop/fop '/var/tmp/xslfo-tsy5I1' '/var/tmp/pdf-iqe6y5' -c '/usr/data/www/FOML/fop.xconf'
         //
 
         // print_r(array('cmd'=>$cmd,
@@ -152,6 +151,7 @@ class Foml
             $stderr = file($errFile);
             unlink($outFile);
             unlink($errFile);
+            unlink($confFileName);
             Dump("cmd={$cmd}");
             Dump("result={$exit}");
             Dump($stdout);
@@ -163,7 +163,10 @@ class Foml
         unlink($outFile);
         unlink($errFile);
 
-        if (!Foml::$keepTempFiles) unlink($xslFoFileName);
+        if (!Foml::$keepTempFiles) {
+            unlink($xslFoFileName);
+            unlink($confFileName);
+        }
         return $pdfFileName;
     }
 

@@ -18,22 +18,13 @@ Installation
 
 1. Clone the FOML repository into your PHP code library.
 
-2. Download the binaries (compiled Java, but they call them binaries) for FOP from [The Apache FOP site](http://xmlgraphics.apache.org/fop/download.html).
-```
-wget http://mirror.mel.bkb.net.au/pub/apache/xmlgraphics/fop/binaries/fop-1.1-bin.zip
-```
- 
-3. Untar the FOP binaries into a subdirectory inside the FOML directory.
-```
-unzip fop-1.1-bin.zip
-chmod ugo+x fop-1.1/fop
-rm fop-1.1-bin.zip
-```
+2. Install Java 8 or later.
 
-4. Install Java if you don't already have it, and verify that the fop executable will launch okay from the command line.  ```fop-1.1/fop -version``` should generate a version number.
+3. Run the install script, which downloads the pinned [Apache FOP](http://xmlgraphics.apache.org/fop/download.html)
+release, verifies its checksum, unpacks it into the FOML directory and points the `fop` symlink at it.
+It prints the FOP version when it's done.  To change versions, edit `VERSION` and `SHA512` in the script and rerun it.
 ```
-%fop-1.1/fop -version
-FOP Version 1.1
+./install-fop.sh
 ```
 
 Your installation will have a directory structure something like this:
@@ -45,9 +36,14 @@ Your installation will have a directory structure something like this:
        +--examples/
           +--foml/
        +--fonts/
-       +--fop-1.1/
-          +--fop    (this is a shell script that launches fop)
+       +--fop -> fop-2.12/fop
+       +--fop-2.12/
+          +--fop/
+             +--fop    (this is a shell script that launches fop)
 ```
+
+Relative URIs in templates, such as `%external-graphic(src="url(images/logo.png)")`, are resolved
+against the web server's document root (or the current directory when run from the command line).
 
 Fonts
 -----
@@ -76,7 +72,7 @@ When using TTF fonts, only the glyphs actually used will be embedded.
 
 If you find it necessary to tweak the directory layout for fonts or the font cache, the key things to know are:
 
- - the font directory is specified in ```FOML/fop.xconf``` and is relative to the FOML directory, which will be the cwd when Fop is executed, and
+ - the font directory is specified in ```FOML/fop.xconf```; use an absolute path, since relative paths are resolved against the document root, and
 
  - the font cache directory is ```.fop/fop-fonts.cache```, and is relative to the value of Java's ```user.home``` which is set explicitly in Foml::XslFoToPdf to the FOML directory.
 
